@@ -2,6 +2,7 @@ var tmi = require('tmi.js');
 var request = require('request');
 
 const userChannel = process.env.CHANNEL;
+const port1 = process.env.PORT || 80;
 var ans;
 
 var options = {
@@ -9,11 +10,12 @@ var options = {
 		debug: true
 	},
 	connection: {
-		cluster: 'aws',
+		port: port1,
+		cluster: "aws",
 		reconnect: true
 	},
 	identity: {
-		username: 'susiaibot',
+		username: "susiaibot",
 		password: process.env.OAUTH_TOKEN
 	},
 	channels: [userChannel]
@@ -39,11 +41,10 @@ client.on('chat', function(channel, userstate, message, self) {
 		if (error) throw new Error(error);
 		ans = (JSON.parse(body)).answers[0].actions[0].expression;
 		client.action(userChannel, ans);
-	});
-
+	})
 	//console.log(ans);
 });
 
 client.on('connected', function(address, port) {
-	console.log(`Address: ${address} Port: ${port}`);
+	client.action(userChannel, "Welcome, I'm SUSI.");
 });
