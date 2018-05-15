@@ -2,7 +2,7 @@ var tmi = require('tmi.js');
 //var request = require('request');
 
 const userChannel = process.env.CHANNEL;
-//const port1 = process.env.PORT || 80;
+const port1 = process.env.PORT || 80;
 var ans;
 
 var options = {
@@ -10,7 +10,7 @@ var options = {
 		debug: true
 	},
 	connection: {
-		//port: port1,
+		port: port1,
 		cluster: "aws",
 		reconnect: true
 	},
