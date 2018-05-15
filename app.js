@@ -10,7 +10,7 @@ var options = {
 		debug: true
 	},
 	connection: {
-		port: process.env.PORT || 80,
+		//port: process.env.PORT || 80,
 		cluster: "aws",
 		reconnect: true
 	},
