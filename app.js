@@ -1,8 +1,8 @@
 var tmi = require('tmi.js');
-var request = require('request');
+//var request = require('request');
 
-const userChannel = process.env.CHANNEL;
-const port1 = process.env.PORT || 80;
+//const userChannel = 'dns4044';
+//const port1 = process.env.PORT || 80;
 var ans;
 
 var options = {
@@ -10,21 +10,37 @@ var options = {
 		debug: true
 	},
 	connection: {
-		port: port1,
+		//port: port1,
 		cluster: "aws",
 		reconnect: true
 	},
 	identity: {
 		username: "susiaibot",
-		password: process.env.OAUTH_TOKEN
+		password: 'oauth:u5et9ynm3m9l3iauj9xv0ambzuo9qk'
 	},
-	channels: [userChannel]
+	channels: ["dns4044"]
 };
 
 // Connecting to IRC
 var client = new tmi.client(options);
 client.connect();
 
+client.on('chat', function(channel, userstate, message, self){
+	client.action("dns4044", message);
+});
+
+client.on('connected', function(address, port){
+	client.action("dns4044", "Hi I'm SUSI.");
+});
+
+
+
+
+
+
+
+
+/*
 client.on('chat', function(channel, userstate, message, self) {
 	// setting options to make a successful call to SUSI API
 	var options1 = {
@@ -47,4 +63,4 @@ client.on('chat', function(channel, userstate, message, self) {
 
 client.on('connected', function(address, port) {
 	client.action(userChannel, "Welcome, I'm SUSI.");
-});
+});*/
