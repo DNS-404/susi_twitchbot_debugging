@@ -1,7 +1,7 @@
 var tmi = require('tmi.js');
 //var request = require('request');
 
-//const userChannel = 'dns4044';
+const userChannel = process.env.CHANNEL;
 //const port1 = process.env.PORT || 80;
 var ans;
 
@@ -16,9 +16,9 @@ var options = {
 	},
 	identity: {
 		username: "susiaibot",
-		password: 'oauth:u5et9ynm3m9l3iauj9xv0ambzuo9qk'
+		password: process.env.OAUTH_TOKEN
 	},
-	channels: ["dns4044"]
+	channels: [userChannel]
 };
 
 // Connecting to IRC
@@ -26,11 +26,11 @@ var client = new tmi.client(options);
 client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
-	client.action("dns4044", message);
+	client.action(userChannel, message);
 });
 
 client.on('connected', function(address, port){
-	client.action("dns4044", "Hi I'm SUSI.");
+	client.action(userChannel, "Hi I'm SUSI.");
 });
 
 
