@@ -1,5 +1,8 @@
 var tmi = require('tmi.js');
 var request = require('request');
+const express = require('express');
+
+const app = express();
 
 const userChannel = process.env.CHANNEL;
 //const port1 = process.env.PORT || 80;
@@ -11,7 +14,7 @@ var options = {
 		debug: true
 	},
 	connection: {
-		port: 6667,
+		//port: 6667,
 		reconnect: true
 	},
 	identity: {
@@ -51,4 +54,9 @@ client.on('connected', function(address, port){
 	console.log("Heroku port: " + process.env.PORT);
 	console.log("App port: " + port);
 	client.action(userChannel, "Welcome, I'm SUSI bot.");
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+   console.log(`listening on ${port}`);
 });
