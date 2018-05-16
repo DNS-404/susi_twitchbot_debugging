@@ -11,7 +11,7 @@ var options = {
 		debug: true
 	},
 	connection: {
-		port: port1,
+		//port: port1,
 		reconnect: true
 	},
 	identity: {
