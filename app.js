@@ -11,6 +11,7 @@ var options = {
 		debug: true
 	},
 	connection: {
+		server: "0.0.0.0",
 		port: port1,
 		reconnect: true
 	},
