@@ -11,8 +11,7 @@ var options = {
 		debug: true
 	},
 	connection: {
-		server: "0.0.0.0",
-		port: port1,
+		//port: port1,
 		reconnect: true
 	},
 	identity: {
@@ -49,5 +48,7 @@ client.on('chat', function(channel, userstate, message, self){
 
 client.on('connected', function(address, port){
 	//console.log(`Address: ${address}, Port: ${port}`);
+	console.log("Heroku PORT: " + process.env.PORT);
+	console.log("App port: " + port);
 	client.action(userChannel, "Welcome, I'm SUSI.");
 });
