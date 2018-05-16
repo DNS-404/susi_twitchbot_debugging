@@ -11,7 +11,7 @@ var options = {
 		debug: true
 	},
 	connection: {
-		//port: port1,
+		port: port1,
 		reconnect: true
 	},
 	identity: {
@@ -28,7 +28,7 @@ client.connect();
 client.on('chat', function(channel, userstate, message, self){
 
 	// Setting options to make a successful call to SUSI API
-	var options1 = {
+	/*var options1 = {
 		method: 'GET',
 		url: 'http://api.susi.ai/susi/chat.json',
 		qs:
@@ -42,13 +42,13 @@ client.on('chat', function(channel, userstate, message, self){
 		if (error) throw new Error(error);
 		ans = (JSON.parse(body)).answers[0].actions[0].expression;
 		client.action(userChannel, ans);
-	});
-
+	});*/
+	client.action(userChannel, message);
 });
 
 client.on('connected', function(address, port){
 	//console.log(`Address: ${address}, Port: ${port}`);
-	console.log("Heroku PORT: " + process.env.PORT);
+	console.log("Heroku port: " + process.env.PORT);
 	console.log("App port: " + port);
-	client.action(userChannel, "Welcome, I'm SUSI.");
+	client.action(userChannel, "Welcome, I'm an echo bot.");
 });
