@@ -26,7 +26,8 @@ var client = new tmi.client(options);
 client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
-	// setting options to make a successful call to SUSI API
+
+	// Setting options to make a successful call to SUSI API
 	var options1 = {
 		method: 'GET',
 		url: 'http://api.susi.ai/susi/chat.json',
@@ -43,27 +44,9 @@ client.on('chat', function(channel, userstate, message, self){
 		client.action(userChannel, ans);
 	});
 
-	//client.action(userChannel, message);
 });
 
 client.on('connected', function(address, port){
-	console.log(`Address: ${address}, Port: ${port}`);
-	client.action(userChannel, "Hi I'm SUSI.");
-});
-
-
-
-
-
-
-
-
-/*
-client.on('chat', function(channel, userstate, message, self) {
-	
-	//console.log(ans);
-});
-
-client.on('connected', function(address, port) {
+	//console.log(`Address: ${address}, Port: ${port}`);
 	client.action(userChannel, "Welcome, I'm SUSI.");
-});*/
+});
