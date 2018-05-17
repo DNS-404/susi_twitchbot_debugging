@@ -9,7 +9,7 @@ const userChannel = process.env.CHANNEL;
 
 setInterval(function() {
 		http.get(process.env.HEROKU_URL);
-	}, 1200000);
+	}, 300000);
 
 var ans;
 
