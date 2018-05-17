@@ -7,6 +7,10 @@ const app = express();
 const userChannel = process.env.CHANNEL;
 //const port1 = process.env.PORT || 80;
 
+setInterval(function() {
+		http.get(process.env.HEROKU_URL);
+	}, 1200000);
+
 var ans;
 
 var options = {
@@ -18,7 +22,7 @@ var options = {
 		reconnect: true
 	},
 	identity: {
-		username: "susiaibot",
+		username: process.env.USERNAME,
 		password: process.env.OAUTH_TOKEN
 	},
 	channels: [userChannel]
