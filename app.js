@@ -34,34 +34,37 @@ var client = new tmi.client(options);
 client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
+	var a = message.split(" "); //splitting message on the first space
 
-	// Setting options to make a successful call to SUSI API
-	var options1 = {
-		method: 'GET',
-		url: 'http://api.susi.ai/susi/chat.json',
-		qs:
-		{
-			timezoneOffset: '-300',
-			q: message
-		}
-	};
+	if(a[0] === `@${process.env.USERNAME}`){
+		// Setting options to make a successful call to SUSI API
+		var options1 = {
+			method: 'GET',
+			url: 'http://api.susi.ai/susi/chat.json',
+			qs:
+			{
+				timezoneOffset: '-300',
+				q: a[1]
+			}
+		};
 
-	request(options1, function(error, response, body) {
-		if (error) throw new Error(error);
-		if((JSON.parse(body)).answers[0])
-			ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
-		else
-			ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
-		client.action(userChannel, ans);
-	});
-	//client.action(userChannel, message);
+		request(options1, function(error, response, body) {
+			if (error) throw new Error(error);
+			if((JSON.parse(body)).answers[0])
+				ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
+			else
+				ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
+			client.action(userChannel, ans);
+		});
+		//client.action(userChannel, message);
+	}
 });
 
 client.on('connected', function(address, port){
 	//console.log(`Address: ${address}, Port: ${port}`);
 	console.log("Heroku port: " + process.env.PORT);
 	console.log("App port: " + port);
-	client.action(userChannel, "Welcome, I'm SUSI bot.");
+	client.action(userChannel, `Hi, I'm SUSI bot. To talk to me, please use '@${process.env.USERNAME}'`);
 });
 
 const port = process.env.PORT || 3000;
