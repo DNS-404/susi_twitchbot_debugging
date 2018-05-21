@@ -4,13 +4,11 @@ const express = require('express');
 var http = require('http');
 
 const app = express();
-
 const userChannel = process.env.CHANNEL;
-//const port1 = process.env.PORT || 80;
 
 setInterval(function() {
 		http.get(process.env.HEROKU_URL);
-	}, 300000);
+	}, 600000); //every 10 minutes
 
 var ans;
 
@@ -19,7 +17,6 @@ var options = {
 		debug: true
 	},
 	connection: {
-		//port: 6667,
 		reconnect: true
 	},
 	identity: {
@@ -34,11 +31,12 @@ var client = new tmi.client(options);
 client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
-	var b = message.split('@'); //split at '@'
-	if(b[1]){
-		var a = b[1].substring(0, (process.env.USERNAME).length);
+	var u = message.split('@');
+	if(u[1]){ //If someone is tagged
+		var name = u[1].substring(0, (process.env.USERNAME).length);
 
-		if(a === process.env.USERNAME){ //SUSI is tagged
+		if(name === process.env.USERNAME){ // checking if SUSI is tagged
+
 			// Setting options to make a successful call to SUSI API
 			var options1 = {
 				method: 'GET',
@@ -46,31 +44,29 @@ client.on('chat', function(channel, userstate, message, self){
 				qs:
 				{
 					timezoneOffset: '-300',
-					q: b[1].substring((process.env.USERNAME).length + 1, b[1].length)
+					q: u[1].substring((process.env.USERNAME).length + 1, u[1].length)
 				}
 			};
 
 			request(options1, function(error, response, body) {
 				if (error) throw new Error(error);
+
 				if((JSON.parse(body)).answers[0])
 					ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
 				else
 					ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
+				
 				client.action(userChannel, ans);
 			});
-			//client.action(userChannel, message);
 		}
 	}
 });
 
 client.on('connected', function(address, port){
-	//console.log(`Address: ${address}, Port: ${port}`);
-	console.log("Heroku port: " + process.env.PORT);
-	console.log("App port: " + port);
-	client.action(userChannel, `Hi, I'm SUSI bot. To talk to me, please use '@${process.env.USERNAME}'`);
+	client.action(userChannel, `Hi, I'm SUSI. Mention me through @${process.env.USERNAME} to chat with me.`);
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-   console.log(`listening on ${port}`);
+   console.log(`Listening on ${port}`);
 });
