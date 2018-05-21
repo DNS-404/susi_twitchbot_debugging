@@ -35,29 +35,31 @@ client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
 	var b = message.split('@'); //split at '@'
-	var a = b[1].substring(0, (process.env.USERNAME).length);
+	if(b[1]){
+		var a = b[1].substring(0, (process.env.USERNAME).length);
 
-	if(a === process.env.USERNAME){ //SUSI is tagged
-		// Setting options to make a successful call to SUSI API
-		var options1 = {
-			method: 'GET',
-			url: 'http://api.susi.ai/susi/chat.json',
-			qs:
-			{
-				timezoneOffset: '-300',
-				q: b[1].substring((process.env.USERNAME).length + 1, b[1].length)
-			}
-		};
+		if(a === process.env.USERNAME){ //SUSI is tagged
+			// Setting options to make a successful call to SUSI API
+			var options1 = {
+				method: 'GET',
+				url: 'http://api.susi.ai/susi/chat.json',
+				qs:
+				{
+					timezoneOffset: '-300',
+					q: b[1].substring((process.env.USERNAME).length + 1, b[1].length)
+				}
+			};
 
-		request(options1, function(error, response, body) {
-			if (error) throw new Error(error);
-			if((JSON.parse(body)).answers[0])
-				ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
-			else
-				ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
-			client.action(userChannel, ans);
-		});
-		//client.action(userChannel, message);
+			request(options1, function(error, response, body) {
+				if (error) throw new Error(error);
+				if((JSON.parse(body)).answers[0])
+					ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
+				else
+					ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
+				client.action(userChannel, ans);
+			});
+			//client.action(userChannel, message);
+		}
 	}
 });
 
