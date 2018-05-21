@@ -34,9 +34,10 @@ var client = new tmi.client(options);
 client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
-	var a = message.substring(0, (process.env.USERNAME).length + 1); //splitting message on the first space
+	var b = message.split('@'); //split at '@'
+	var a = b[1].substring(0, (process.env.USERNAME).length);
 
-	if(a === `@${process.env.USERNAME}`){
+	if(a === process.env.USERNAME){ //SUSI is tagged
 		// Setting options to make a successful call to SUSI API
 		var options1 = {
 			method: 'GET',
@@ -44,7 +45,7 @@ client.on('chat', function(channel, userstate, message, self){
 			qs:
 			{
 				timezoneOffset: '-300',
-				q: message.substring((process.env.USERNAME).length + 2, message.length)
+				q: b[1].substring((process.env.USERNAME).length + 1, b[1].length)
 			}
 		};
 
