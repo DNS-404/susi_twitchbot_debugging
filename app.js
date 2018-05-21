@@ -31,9 +31,9 @@ var client = new tmi.client(options);
 client.connect();
 
 client.on('chat', function(channel, userstate, message, self){
-
 	if(message.includes("@"+process.env.USERNAME)){ // checking if SUSI is tagged
-		var a = message.split("@" + process.env.USERNAME + " ");
+		var u = message.split("@" + process.env.USERNAME + " ");
+
 		// Setting options to make a successful call to SUSI API
 		var options1 = {
 			method: 'GET',
@@ -41,7 +41,7 @@ client.on('chat', function(channel, userstate, message, self){
 			qs:
 			{
 				timezoneOffset: '-300',
-				q: a[1]
+				q: u[1]
 			}
 		};
 
@@ -52,15 +52,14 @@ client.on('chat', function(channel, userstate, message, self){
 				ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
 			else
 				ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
-			
+		
 			client.action(userChannel, ans);
 		});
 	}
-
 });
 
 client.on('connected', function(address, port){
-	client.action(userChannel, `Hi, I'm SUSI. Mention me through @${process.env.USERNAME} to chat with me.`);
+	client.action(userChannel, `Hi, I'm SUSI. Mention me using @${process.env.USERNAME} to chat with me.`);
 });
 
 const port = process.env.PORT || 3000;
