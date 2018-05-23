@@ -29,11 +29,46 @@ var options = {
 var client = new tmi.client(options);
 // Connect the client to the server
 client.connect();
+/*
+client.on('chat', function(channel, userstate, message, self){
+	var u = message.split('@');
+	if(u[1]){ // checking if someone is tagged
+		var name = u[1].substring(0, (process.env.USERNAME).length);
 
+		if(name === process.env.USERNAME){ // checking if SUSI is tagged
+
+			// Setting options to make a successful call to SUSI API
+			var options1 = {
+				method: 'GET',
+				url: 'http://api.susi.ai/susi/chat.json',
+				qs:
+				{
+					timezoneOffset: '-300',
+					q: u[1].substring((process.env.USERNAME).length + 1, u[1].length)
+				}
+			};
+
+			request(options1, function(error, response, body) {
+				if (error) throw new Error(error);
+
+				if((JSON.parse(body)).answers[0])
+					ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
+				else
+					ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
+				
+				client.action(userChannel, ans);
+			});
+		}
+	}
+});
+*/
 client.on('chat', function(channel, userstate, message, self){
 	if(message.includes("@"+process.env.USERNAME)){ // checking if SUSI is tagged
 		var u = message.split("@" + process.env.USERNAME + " ");
-
+		var emotes = [':)', ':(', ':o'];
+		for(i in emotes){
+			u[1] = u[1].replace(emotes[i], '');
+		}
 		// Setting options to make a successful call to SUSI API
 		var options1 = {
 			method: 'GET',
