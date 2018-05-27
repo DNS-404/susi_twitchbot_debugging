@@ -54,6 +54,7 @@ client.on('chat', function(channel, userstate, message, self){
 				if((JSON.parse(body)).answers[0]) {
 					var data = JSON.parse(body);
 					if(data.answers[0].actions[0].type === "table") {
+						ans = "";
 						let colNames = data.answers[0].actions[0].columns;
 						let lengthOfTable = data.answers[0].metadata.count;
 						if(lengthOfTable > 4) {
