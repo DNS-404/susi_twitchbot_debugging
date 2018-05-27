@@ -54,13 +54,13 @@ client.on('chat', function(channel, userstate, message, self){
 				if((JSON.parse(body)).answers[0]) {
 					var data = JSON.parse(body);
 					if(data.answers[0].actions[0].type === "table") {
-						ans = "";
+						ans = userstate['display-name'];
 						let colNames = data.answers[0].actions[0].columns;
 						let lengthOfTable = data.answers[0].metadata.count;
 						if(lengthOfTable > 4) {
-							ans += "Due to message limit, only 4 results are shown:--- ";
+							ans += " Due to message limit, only 4 results are shown:--- ";
 						} else {
-							ans += "Results are shown below:--- ";
+							ans += " Results are shown below:--- ";
 						}
 						for(let i=0; i<((lengthOfTable>4)?4:lengthOfTable); i++) {
 							for(let colNo in colNames) {
