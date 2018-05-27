@@ -10,7 +10,7 @@ setInterval(function() {
 		http.get(process.env.HEROKU_URL);
 	}, 600000); //every 10 minutes
 
-var ans;
+var ans = '';
 
 var options = {
 	options: {
@@ -29,7 +29,7 @@ var options = {
 var client = new tmi.client(options);
 // Connect the client to the server
 client.connect();
-/*
+
 client.on('chat', function(channel, userstate, message, self){
 	var u = message.split('@');
 	if(u[1]){ // checking if someone is tagged
@@ -51,45 +51,33 @@ client.on('chat', function(channel, userstate, message, self){
 			request(options1, function(error, response, body) {
 				if (error) throw new Error(error);
 
-				if((JSON.parse(body)).answers[0])
-					ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
-				else
+				if((JSON.parse(body)).answers[0]) {
+					var data = JSON.parse(body);
+					if(data.answers[0].actions[0].type === "table") {
+						let colNames = data.answers[0].actions[0].columns;
+						let lengthOfTable = data.answers[0].metadata.count;
+						if(length > 20) {
+							ans += "Due to message limit, only some results are shown:\n\n";
+						} else {
+							ans += "Results are shown below:\n\n";
+						}
+						for(let i=0; i<((length>20)?20:length); i++) {
+							for(let colNo in colNames) {
+								ans += `${colNames[colNo]} : `;
+								ans += `${data.answers[0].data[i][colNo]}, `;
+							}
+							ans += "\n\n";
+						}
+					} else {
+						ans = userstate['display-name'] + " " + data.answers[0].actions[0].expression;
+					}
+				} else {
 					ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
+				}
 				
 				client.action(userChannel, ans);
 			});
 		}
-	}
-});
-*/
-client.on('chat', function(channel, userstate, message, self){
-	if(message.includes("@"+process.env.USERNAME)){ // checking if SUSI is tagged
-		var u = message.split("@" + process.env.USERNAME + " ");
-		var emotes = [':)', ':(', ':o'];
-		for(i in emotes){
-			u[1] = u[1].replace(emotes[i], '');
-		}
-		// Setting options to make a successful call to SUSI API
-		var options1 = {
-			method: 'GET',
-			url: 'http://api.susi.ai/susi/chat.json',
-			qs:
-			{
-				timezoneOffset: '-300',
-				q: u[1]
-			}
-		};
-
-		request(options1, function(error, response, body) {
-			if (error) throw new Error(error);
-
-			if((JSON.parse(body)).answers[0])
-				ans = userstate['display-name'] + " " + (JSON.parse(body)).answers[0].actions[0].expression;
-			else
-				ans = userstate['display-name'] + " Sorry, I could not understand what you just said."
-		
-			client.action(userChannel, ans);
-		});
 	}
 });
 
