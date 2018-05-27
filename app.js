@@ -56,17 +56,17 @@ client.on('chat', function(channel, userstate, message, self){
 					if(data.answers[0].actions[0].type === "table") {
 						let colNames = data.answers[0].actions[0].columns;
 						let lengthOfTable = data.answers[0].metadata.count;
-						if(lengthOfTable > 20) {
+						if(lengthOfTable > 15) {
 							ans += "Due to message limit, only some results are shown:\n\n";
 						} else {
 							ans += "Results are shown below:\n\n";
 						}
-						for(let i=0; i<((lengthOfTable>20)?20:lengthOfTable); i++) {
+						for(let i=0; i<((lengthOfTable>15)?15:lengthOfTable); i++) {
 							for(let colNo in colNames) {
 								ans += `${colNames[colNo]} : `;
 								ans += `${data.answers[0].data[i][colNo]}, `;
 							}
-							ans += "\n\n";
+							ans += " | ";
 						}
 					} else {
 						ans = userstate['display-name'] + " " + data.answers[0].actions[0].expression;
